@@ -1,7 +1,7 @@
-# Replicated-Key-Value-Storage
+# Replicated Key-Value Storage
 Simplified version of Amazon DynamoDB (Distributed Systems PA-4)
 
-Implemented a Dynamo-style key-value storage, providing availablity and linearizablity at the same time.
+Implemented a Dynamo-style key-value storage, providing availability and linearizability at the same time.
 - Implemented partitioning, replication, and failure handling.
 
 
