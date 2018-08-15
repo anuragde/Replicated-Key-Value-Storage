@@ -1,0 +1,67 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:2:1-29:12
+	package
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:3:5-53
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:5:5-30
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml
+	android:versionCode
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:4:5-28
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:6:5-66
+	android:name
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:6:22-64
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:7:5-74
+	android:name
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:7:22-72
+application
+ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:8:5-27:19
+	android:label
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:11:9-41
+	android:allowBackup
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:9:9-35
+	android:icon
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:10:9-45
+	android:theme
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:12:9-40
+activity#edu.buffalo.cse.cse486586.simpledynamo.SimpleDynamoActivity
+ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:13:9-21:20
+	android:label
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:15:13-45
+	android:name
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:14:13-87
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:16:13-20:29
+action#android.intent.action.MAIN
+ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:17:17-69
+	android:name
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:17:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:19:17-77
+	android:name
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:19:27-74
+provider#edu.buffalo.cse.cse486586.simpledynamo.SimpleDynamoProvider
+ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:23:9-25:42
+	android:authorities
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:24:13-82
+	android:multiprocess
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:25:13-40
+	android:name
+		ADDED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml:23:19-93
+uses-sdk
+INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+	android:targetSdkVersion
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml
+		INJECTED from /home/anurag/Desktop/SimpleDynamo/app/src/main/AndroidManifest.xml

@@ -1,0 +1,643 @@
+Index: app/src/main/java/edu/buffalo/cse/cse486586/simpledynamo/SimpleDynamoProvider.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/edu/buffalo/cse/cse486586/simpledynamo/SimpleDynamoProvider.java	(date 1533144614000)
++++ app/src/main/java/edu/buffalo/cse/cse486586/simpledynamo/SimpleDynamoProvider.java	(date 1533144614000)
+@@ -15,7 +15,6 @@
+ import java.net.ServerSocket;
+ import java.net.Socket;
+ import java.net.SocketTimeoutException;
+-import java.security.Key;
+ import java.security.MessageDigest;
+ import java.security.NoSuchAlgorithmException;
+ import java.util.ArrayList;
+@@ -283,7 +282,7 @@
+ 		Log.v("Created " + hashedKey, "with value " + string + "Before hash " + filename);
+ 		FileOutputStream outputStream;
+ 		try {//Context.MODE_PRIVATE
+-			String sendReq ="aDel+insertReplica+aDel"+filename+"aDel"+string+"aDel"+myNode.node_id+"aDel"+0;
++			String sendReq ="aDel+insertReplica+aDel"+filename+"aDel"+string+"aDel"+myNode.node_id+"aDel"+"0";
+ 			sendReplica(filename,string,myNode.succ,sendReq);
+ 			sendReplica(filename,string,myNode.succ.succ,sendReq);
+ 			System.out.println(filename);
+@@ -305,46 +304,7 @@
+ 		String filename = key;
+ 		String string = value;
+ 		String hashedKey="";
+-		Log.v("Created " + hashedKey, "with value " + string + "Before hash " + filename);
+-		FileOutputStream outputStream;
+-		try {//Context.MODE_PRIVATE
+-			Log.v("insertReplica", value);
+-			System.out.println(filename);
+-			System.out.println(context);
+-			context.deleteFile(filename);
+-			outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+-			outputStream.write(string.getBytes());
+-			outputStream.flush();
+-			outputStream.close();
+-
+-		} catch (Exception e) {
+-			e.printStackTrace();
+-try{
+-	Log.v(filename,string);
+-	outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+-	outputStream.write(string.getBytes());
+-	outputStream.flush();
+-	outputStream.close();
+-}
+-catch (Exception e1){
+-e1.printStackTrace();
+-String result[] = new String[2];
+-result[0] = key;
+-result[1] = value;
+-reqQue2.add(result);
+-
+-}
+-
+-
+-		}
+-	}
+-
+-
+-	synchronized public void insertReplica2(Context context,String key,String value) {
+-		// TODO Auto-generated method stub
+-		String filename = key;
+-		String string = value;
+-		String hashedKey="";
++		Context context = SimpleDynamoActivity.getAppContext();
+ 		Log.v("Created " + hashedKey, "with value " + string + "Before hash " + filename);
+ 		FileOutputStream outputStream;
+ 		try {//Context.MODE_PRIVATE
+@@ -359,21 +319,21 @@
+ 
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+-			try{
+-				Log.v(filename,string);
+-				outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+-				outputStream.write(string.getBytes());
+-				outputStream.flush();
+-				outputStream.close();
+-			}
+-			catch (Exception e1){
+-				e1.printStackTrace();
+-				String result[] = new String[2];
+-				result[0] = key;
+-				result[1] = value;
+-				reqQue2.add(result);
++try{
++	Log.v(filename,string);
++	outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
++	outputStream.write(string.getBytes());
++	outputStream.flush();
++	outputStream.close();
++}
++catch (Exception e1){
++e1.printStackTrace();
++String result[] = new String[2];
++result[0] = key;
++result[1] = value;
++reqQue2.add(result);
+ 
+-			}
++}
+ 
+ 
+ 		}
+@@ -681,8 +641,8 @@
+ 
+ 
+ 		}
+-		Log.v("flag",flag);
+-if(flag.contains("1")) {
++
++if(flag.equals(Integer.toString(1))) {
+ 	insertMissedData(key, value, missed_node);
+ }
+ 		return;
+@@ -834,6 +794,7 @@
+ 			}
+ 	}
+ 		else if(reqNode.equals(myNode.pred.node_id)) {
++			try {
+ 				String filename = "";
+ 				String line = "";
+ 
+@@ -893,7 +854,8 @@
+ 					e.printStackTrace();
+ 				}
+ 
+-
++			} finally {
++			}
+ 		}
+ 		return;
+ 	}
+@@ -916,7 +878,7 @@
+ 		}
+ 		responsibleNode = myNode.lookUp(hashedKey);
+ 		if ((myNode.node_id).equals(responsibleNode.node_id)) {
+-			String sendReq ="aDel+insertReplica+aDel"+filename+"aDel"+string+"aDel"+myNode.node_id+"aDel"+0;
++			String sendReq ="aDel+insertReplica+aDel"+filename+"aDel"+string+"aDel"+myNode.node_id+"aDel"+"0";
+ 			sendReplica(filename,string,myNode.succ,sendReq);
+ 			sendReplica(filename,string,myNode.succ.succ,sendReq);
+ 			Log.v("Created " + filename, "with value " + string );
+@@ -986,7 +948,7 @@
+ 				sendReplica(key,value,node.succ,sendReq);
+ 			}
+ 			else{
+-				insertReplica1(key,value,node.node_id,"1");
++				insertMissedData(key,value,node.node_id);
+ 
+ 			}		}
+ 		catch (EOFException ee){
+@@ -995,7 +957,7 @@
+ 				sendReplica(key,value,node.succ,sendReq);
+ 			}
+ 			else{
+-				insertReplica1(key,value,node.node_id,"1");
++				insertMissedData(key,value,node.node_id);
+ 
+ 			}
+ 		}
+@@ -1005,7 +967,7 @@
+ 				sendReplica(key,value,node.succ,sendReq);
+ 			}
+ 			else{
+-				insertReplica1(key,value,node.node_id,"1");
++				insertMissedData(key,value,node.node_id);
+ 
+ 			}
+ 		}
+@@ -1034,52 +996,53 @@
+ 		}
+ 		catch(SocketTimeoutException e){
+ 			Log.e("ServerTask","sendToResponsibleNode Error " +responsible_node.node_id );
+-			String sendReq ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+0;
+-			String sendReq1 ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+1;
++			String sendReq ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+"0";
++			String sendReq1 ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+"1";
+ 
+-			if(responsible_node.succ.node_id.equals(myNode.node_id)){
+-				insertReplica2(getContext(),key,value);
++			if(responsible_node.succ.node_id.equals(myNode.node_id))
++			{
++				insertReplica(key,value);
++
+ 				insertMissedData(key,value,responsible_node.node_id);
+ 			}
+-
+ 			else
+ 				sendReplica(key,value,responsible_node.succ,sendReq1);
+ 			if(responsible_node.succ.succ.node_id.equals(myNode.node_id))
+-				insertReplica2(getContext(),key,value);
++				insertReplica(key,value);
+ 			else
+ 				sendReplica(key,value,responsible_node.succ.succ,sendReq);
+ 		}
+ 		catch(EOFException ex){
+ 			Log.e("ServerTask","sendToResponsibleNode Error " +responsible_node.node_id );
+-			String sendReq ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+0;
+-			String sendReq1 ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+1;
++			String sendReq ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+"0";
++			String sendReq1 ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+"1";
+ 
+ 			if(responsible_node.succ.node_id.equals(myNode.node_id)){
+-				insertReplica2(getContext(),key,value);
++				insertReplica(key,value);
+ 				insertMissedData(key,value,responsible_node.node_id);
+ 			}
+ 
+ 			else
+ 				sendReplica(key,value,responsible_node.succ,sendReq1);
+ 			if(responsible_node.succ.succ.node_id.equals(myNode.node_id))
+-				insertReplica2(getContext(),key,value);
++				insertReplica(key,value);
+ 			else
+ 				sendReplica(key,value,responsible_node.succ.succ,sendReq);
+ 		}
+ 		catch (Exception e){
+ 			Log.e("ServerTask","sendToResponsibleNode Error " +responsible_node.node_id );
+-			String sendReq ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+0;
+-			String sendReq1 ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+1;
++			String sendReq ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+"0";
++			String sendReq1 ="aDel"+"insertReplica"+"aDel"+key+"aDel"+value+"aDel"+responsible_node.node_id+"aDel"+"1";
+ 
+ 			if(responsible_node.succ.node_id.equals(myNode.node_id)){
+-				insertReplica2(getContext(),key,value);
++				insertReplica(key,value);
++
+ 				insertMissedData(key,value,responsible_node.node_id);
+ 			}
+-
+ 			else
+ 				sendReplica(key,value,responsible_node.succ,sendReq1);
+ 			if(responsible_node.succ.succ.node_id.equals(myNode.node_id))
+-				insertReplica2(getContext(),key,value);
++				insertReplica(key,value);
+ 			else
+ 				sendReplica(key,value,responsible_node.succ.succ,sendReq);
+ 			/*if(responsible_node.succ.node_id.equals(myNode.node_id))
+@@ -1145,9 +1108,8 @@
+ 			e.printStackTrace();
+ 			return false;
+ 		}
+-		Context context = getContext();
+ 
+-		new ClientTask(context).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
++		new ClientTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+ 		return true;
+ 	}
+     void setDirs(){
+@@ -1320,18 +1282,15 @@
+ 				hashedKey = genHash(filename);
+ 			}
+ 			catch(Exception e){
+-				e.printStackTrace();
+ 			}
+ 			responsibleNode = myNode.lookUp(hashedKey);
+-			/*if ((myNode.node_id).equals(responsibleNode.node_id)) {*/
++			if ((myNode.node_id).equals(responsibleNode.node_id)) {
+ 				try {
+ 
+-					getResponsibleNode(responsibleNode.succ.succ,filename);
++					getResponsibleNode2(responsibleNode.succ.succ,filename);
+ 					MatrixCursor.RowBuilder builder = matrixCursor.newRow();
+ 					String result[]  =reqQue.take();
+ 					Log.v("waiting","waiting completed");
+-					Log.v("key",result[1]);
+-					Log.v("value",result[2]);
+ 					builder.add("key",result[1] );
+ 					builder.add("value", result[2]);
+ 					matrixCursor.setNotificationUri(getContext().getContentResolver(), uri);
+@@ -1343,7 +1302,7 @@
+ 				return matrixCursor;
+ 
+ 			}
+-			/*else{
++			else{
+ 				try {
+ 
+ 					getResponsibleNode(responsibleNode,filename);
+@@ -1361,43 +1320,23 @@
+ 				return matrixCursor;
+ 
+ 
+-			}*/
++			}
+ 		}
++	}
+ 
+ 
+-	public void respondQuery1(String filename) {
+-		String line = "";
+-		try {
+-			Log.v("File input stream", filename);
+-			FileInputStream in = getContext().openFileInput(filename);
+-			/*  Log.e(TAG, "File inputStreamReader.");*/
+-			InputStreamReader inputStreamReader = new InputStreamReader(in);
+-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+-			StringBuilder sb = new StringBuilder();
+-			line = bufferedReader.readLine();
+-			sb.append(line);
+-			line = sb.toString();
+-			in.close();
+-			String[] result = {"hi",filename,line};
+-			reqQue.add(result);
+-
+-		} catch (Exception e) {
+-			Log.e(TAG, "File read failed...");
+-			e.printStackTrace();
+-		}
+-	}
+ 
+ 	public void sendQueryReq(){
+ 		Log.v("ServerTask", "Sending updated node list");
+ 		String remotePort[] = {REMOTE_PORT0, REMOTE_PORT1, REMOTE_PORT2, REMOTE_PORT3, REMOTE_PORT4};
+ 
+ 		for (int i = 0; i < 5; i++) {
+-			sendQueryReq1(remotePort[i],i);
++			sendQueryReq1(remotePort[i]);
+ 
+ 		}
+ 		return;
+ 	}
+-	void sendQueryReq1(String nodeId,int i){
++	void sendQueryReq1(String nodeId){
+ 
+ 		if(SimpleDynamoHelper.getConnected(nodeId) && (Integer.parseInt(nodeId) != Integer.parseInt(myNode.node_id))) {
+ 			try {
+@@ -1414,8 +1353,7 @@
+ 					String messageReceived = in.readUTF();
+ 				}
+ 				catch (Exception e){
+-					//sendQueryReq1(nodeId);
+-					connected[i] = false;
++					sendQueryReq1(nodeId);
+ 					e.printStackTrace();
+ 
+ 				}
+@@ -1444,53 +1382,29 @@
+ 		return null;
+ 	}
+ 	synchronized public void getResponsibleNode(Node su,String filename){
+-	if(su.node_id.equals(myNode.node_id)) {
+-		respondQuery1(filename);
+-	}else {
+ 		try {
+ 
+-			Log.v(myNode.node_id, myNode.succ.node_id);
++			Log.v(myNode.node_id,myNode.succ.node_id);
+ 			Socket socket = new Socket(InetAddress.getByAddress(new byte[]{10, 0, 2, 2}), Integer.parseInt(su.node_id));
+ 			DataOutputStream out1 = new DataOutputStream(socket.getOutputStream());
+ 			DataInputStream in = new DataInputStream(socket.getInputStream());
+-			socket.setSoTimeout(300);
+-			String sendReq = "aDel+queryRequest+aDel" + filename + "aDel" + myNode.node_id + "aDel";
+-			out1.writeUTF(sendReq + "\n");
++			//socket.setSoTimeout(300);
++			String sendReq ="aDel+queryRequest+aDel"+filename+"aDel"+myNode.node_id+"aDel";
++			out1.writeUTF(sendReq+"\n");
+ 			out1.flush();
+-			String msgReceived = in.readUTF();
+-			if(msgReceived.contains("Ack")){
+-				out1.close();
+-				in.close();
+-			}
+-			Log.v("send To R Node", "sent queryRequest" + myNode.node_id + " " + su.node_id);
+-
+-		} catch (SocketTimeoutException e) {
++			Log.v("send To R Node","sent queryRequest"+myNode.node_id +" "+ su.node_id);
++		}
++		catch (SocketTimeoutException e){
++			getResponsibleNode(su.succ,filename);
+ 			e.printStackTrace();
+-			if (su.pred.node_id.equals(myNode.node_id))
+-				respondQuery1(filename);
+-			else
+-				getResponsibleNode(su.pred, filename);
+-			Log.e("ClientTask", "getResponsibleNode Error");
+ 
+-		}catch (EOFException ex) {
+-			ex.printStackTrace();
+-			if (su.pred.node_id.equals(myNode.node_id))
+-				respondQuery1(filename);
+-			else
+-				getResponsibleNode(su.pred, filename);
+-			Log.e("ClientTask", "getResponsibleNode Error");
+ 		}
+-		catch (Exception ex) {
++		catch(Exception ex){
++			getResponsibleNode(su.succ,filename);
+ 			ex.printStackTrace();
+-			if (su.pred.node_id.equals(myNode.node_id))
+-				respondQuery1(filename);
+-			else
+-				getResponsibleNode(su.pred, filename);
+-			Log.e("ClientTask", "getResponsibleNode Error");
++			Log.e("ClientTask","sendToResponsibleNode Error");
+ 		}
+-		return;
+ 
+-	}
+ 	}
+ 
+ 	synchronized public void getResponsibleNode2(Node su,String filename){
+@@ -1507,17 +1421,13 @@
+ 			Log.v("send To R Node","sent queryRequest"+myNode.node_id +" "+ su.node_id);
+ 		}
+ 		catch (SocketTimeoutException e){
++			getResponsibleNode(su.pred,filename);
+ 			e.printStackTrace();
+ 
+-			getResponsibleNode(su.pred,filename);
+-
+ 		}
+ 		catch(Exception ex){
++			getResponsibleNode(su.pred,filename);
+ 			ex.printStackTrace();
+-			if(su.pred.node_id.equals(myNode.node_id))
+-				respondQuery1(filename);
+-			else
+-				getResponsibleNode(su.pred,filename);
+ 			Log.e("ClientTask","sendToResponsibleNode Error");
+ 		}
+ 
+@@ -1601,7 +1511,6 @@
+ 						try {
+ 							nodeIds = receivedMessage.split("aDel");
+ 							missedNodeId = nodeIds[2];
+-							SimpleDynamoHelper.updateConnected(missedNodeId);
+ 						} catch (Exception e) {
+ 							Log.e("ServerTask", "EOFException");
+ 							e.printStackTrace();
+@@ -1625,18 +1534,17 @@
+ 						}
+ 						responsibleNode = SimpleDynamoProvider.myNode.lookUp(hashedKey);
+ 						Log.v(hashedKey, fileName);
+-						DataOutputStream outputStream = new DataOutputStream(serverS.getOutputStream());
+-						outputStream.writeUTF("Ack" + "\n");
+-						outputStream.flush();
+ 						/*if ((SimpleDynamoProvider.myNode.node_id).equals(reqNode)) {
+ 							Log.e("ServerTask", "Received queryRequest to self");
+ 
+-						} else*/ /*if ((SimpleDynamoProvider.myNode.node_id).equals(responsibleNode.node_id)) {*/
++						} else*/ if ((SimpleDynamoProvider.myNode.node_id).equals(responsibleNode.node_id)) {
+ 							sdh.respondQuery(reqNode, fileName);
+-						/*} else {
++						} else {
+ 							sdh.getResponsibleNode1(reqNode, SimpleDynamoProvider.myNode.succ, fileName);
+-						}*/
+-
++						}
++						DataOutputStream outputStream = new DataOutputStream(serverS.getOutputStream());
++						outputStream.writeUTF("Ack" + "\n");
++						outputStream.flush();
+ 						Log.v("ServerTask", "Received queryRequest  ");
+ 
+ 					}
+@@ -1704,12 +1612,10 @@
+ 						SimpleDynamoProvider sdh = new SimpleDynamoProvider();
+ 						sdh.insertReplica1(key, value,host_node_ID,flag);
+ 						Log.v("flag",flag);
+-						/*SimpleDynamoProvider sdh1 = new SimpleDynamoProvider();
++						SimpleDynamoProvider sdh1 = new SimpleDynamoProvider();
+ 
+-						if(Integer.parseInt(flag)==1) {
+-							sdh1.insertMissedData(key, value, host_node_ID);
+-						}
+-						new ClientTask1().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);*/
++						if(flag.equals("1"))
++							sdh1.insertMissedData(key,value,host_node_ID);
+ 						DataOutputStream outputStream = new DataOutputStream(serverS.getOutputStream());
+ 						outputStream.writeUTF("Ack" + "\n");
+ 						outputStream.flush();
+@@ -1781,10 +1687,6 @@
+ class ClientTask extends AsyncTask<String, Void, Void> {
+ boolean flag1 = true;
+ boolean flag2 = true;
+-	Context context1;
+-public ClientTask(Context context){
+-	context1 = context;
+-}
+ 	 Queue<String[]> reqQue1 = new LinkedList<String[]>();
+ 	void sendDataRequest() {
+ 			try {
+@@ -1802,7 +1704,6 @@
+ 				String receivedMessage="";
+ 				receivedMessage = in.readUTF();
+ 				socket.setSoTimeout(300);
+-				Context context = SimpleDynamoActivity.getAppContext();
+ 
+ 				if (receivedMessage.contains("sendMissedData")) {
+ 					ArrayList<String[]> arrayList = new ArrayList<String[]>();
+@@ -1814,12 +1715,13 @@
+ 						receivedMessage = in.readUTF();
+ 						result = receivedMessage.split("aDel");
+ 						arrayList.add(result);
+-						sdh.insertReplica2(context1,result[0],result[1]);
++						sdh.insertReplica(result[0],result[1]);
+ 						Log.v("ServerTask Res", result[0] + " " + result[1]);
+-						if(context1==null)
++						if(SimpleDynamoActivity.getAppContext()!=null)
++							sdh.insertReplica(result[0],result[1]);
++						else
+ 							reqQue1.add(result);
+ 					}
+-
+ 				}
+ 			}  catch (EOFException se1) {
+ 				if(flag2)
+@@ -1854,7 +1756,6 @@
+ 				DataInputStream in = new DataInputStream(socket.getInputStream());
+ 				receivedMessage = in.readUTF();
+ 				socket.setSoTimeout(300);
+-				Context context = SimpleDynamoActivity.getAppContext();
+ 
+ 				if (receivedMessage.contains("sendMissedData")) {
+ 					ArrayList<String[]> arrayList = new ArrayList<String[]>();
+@@ -1866,8 +1767,8 @@
+ 						receivedMessage = in.readUTF();
+ 						result = receivedMessage.split("aDel");
+ 						arrayList.add(result);
+-						if(context1!=null)
+-							sdh.insertReplica2(context1,result[0],result[1]);
++						if(SimpleDynamoActivity.getAppContext()!=null)
++							sdh.insertReplica(result[0],result[1]);
+ 						else
+ 							reqQue1.add(result);
+ 						Log.v("ServerTask Res", result[0] + " " + result[1]);
+@@ -1909,7 +1810,6 @@
+ 			DataInputStream in = new DataInputStream(socket.getInputStream());
+ 			receivedMessage = in.readUTF();
+ 			socket.setSoTimeout(300);
+-			Context context = SimpleDynamoActivity.getAppContext();
+ 
+ 			if (receivedMessage.contains("sendMissedData")) {
+ 				ArrayList<String[]> arrayList = new ArrayList<String[]>();
+@@ -1921,16 +1821,15 @@
+ 					receivedMessage = in.readUTF();
+ 					result = receivedMessage.split("aDel");
+ 					arrayList.add(result);
+-					if(context1!=null)
+-						sdh.insertReplica2(context1,result[0],result[1]);
++					if(SimpleDynamoActivity.getAppContext()!=null)
++						sdh.insertReplica(result[0],result[1]);
+ 					else
+ 						reqQue1.add(result);
+ 					Log.v("ServerTask Res", result[0] + " " + result[1]);
+ 				}
+ 			}
+ 		} catch (EOFException se2){
+-			se2.printStackTrace();
+-			/*if(flag1)
++			if(flag1)
+ 				sendDataRequest();
+ 			try {
+ 				Thread.sleep(3000);
+@@ -1938,11 +1837,11 @@
+ 				e.printStackTrace();
+ 			}
+ 			if(flag2)
+-				sendDataRequest1();*/
++				sendDataRequest1();
+ 		} catch (Exception io) {
+ 			Log.e("Exception Thrown", io.toString());
+ 		}
+-	//	flag2 = false;
++		flag2 = false;
+ 		return;
+ 	}
+ 
+@@ -1965,7 +1864,6 @@
+ 			DataInputStream in = new DataInputStream(socket.getInputStream());
+ 			receivedMessage = in.readUTF();
+ 			socket.setSoTimeout(300);
+-			Context context = SimpleDynamoActivity.getAppContext();
+ 
+ 			if (receivedMessage.contains("sendMissedData")) {
+ 				ArrayList<String[]> arrayList = new ArrayList<String[]>();
+@@ -1977,15 +1875,15 @@
+ 					receivedMessage = in.readUTF();
+ 					result = receivedMessage.split("aDel");
+ 					arrayList.add(result);
+-					if(context1!=null)
+-						sdh.insertReplica2(context1,result[0],result[1]);
++					if(SimpleDynamoActivity.getAppContext()!=null)
++						sdh.insertReplica(result[0],result[1]);
+ 					else
+ 						reqQue1.add(result);
+ 					Log.v("ServerTask Res", result[0] + " " + result[1]);
+ 				}
+ 			}
+ 		} catch (EOFException se2){
+-			/*if(flag1)
++			if(flag1)
+ 				sendDataRequest();
+ 			try {
+ 				Thread.sleep(3000);
+@@ -1993,7 +1891,7 @@
+ 				e.printStackTrace();
+ 			}
+ 			if(flag2)
+-				sendDataRequest1();*/
++				sendDataRequest1();
+ 		} catch (Exception io) {
+ 			Log.e("Exception Thrown", io.toString());
+ 		}
+@@ -2010,7 +1908,7 @@
+ 			sendDataRequest();
+ 			sendDataRequest1();
+ 			sendDataRequest2();
+-			//sendDataRequest3();
++			sendDataRequest3();
+ 			Context context = SimpleDynamoActivity.getAppContext();
+ 		Log.v("Client Fetch","reQue1");
+ 			for(int i=0;i<reqQue1.size();i++){
+@@ -2021,9 +1919,22 @@
+ 
+ 
+ 				Log.v(result[0],result[1]);
+-				sdh.insertReplica2(context1,result[0],result[1]);
++				sdh.insertReplica(result[0],result[1]);
+ 			}
+ 	return null;
++	}
++}
++
++class ClientTask1 extends AsyncTask<String, Void, Void> {
++	protected Void doInBackground(String... msgs) {
++			SimpleDynamoProvider sdh = new SimpleDynamoProvider();
++
++			Log.v("ClientTask", "ClientTask invoked1");
++
++			Context context = SimpleDynamoActivity.getAppContext();
++			Log.v("Client Fetch","reQue1");
++			
++			return null;
+ 	}
+-}
+ 
++}
+\ No newline at end of file
