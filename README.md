@@ -10,7 +10,7 @@ Implemented a Dynamo-style key-value storage, providing availability and lineari
 #### Implementation:
 Implementation should always perform read and write operations successfully even under failures (Availability). At the same time, a read operation should always return the most recent value (Linearizability).
 
-#### Partitioning:
+##### Partitioning:
 Partitioning is implemented from the previous assignment on Simple DHT based on Chord protocol.
 
 ##### Replication:
